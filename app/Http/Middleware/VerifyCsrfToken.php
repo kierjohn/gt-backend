@@ -13,5 +13,22 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //
+
+        'api/tasks',
+        'api/users',
+        'api/tasks/*',
+        'api/users/*',
+        'api/login'
     ];
+
+    protected function shouldPassThrough($request)
+    {
+        foreach ($this->except as $route) {
+            if ($request->is($route) && in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE'])) {
+                return true;
+            }
+        }
+
+        return parent::shouldPassThrough($request);
+    }
 }
